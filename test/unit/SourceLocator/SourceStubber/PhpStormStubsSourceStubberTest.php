@@ -170,7 +170,7 @@ class PhpStormStubsSourceStubberTest extends TestCase
 
             $this->assertSameMethodAttributes($method, $stubbed->getMethod($method->getName()));
         }
-
+        
         self::assertEquals($original->getConstants(), $stubbed->getConstants());
     }
 
@@ -227,12 +227,14 @@ class PhpStormStubsSourceStubberTest extends TestCase
         self::assertSame($original->getName(), $stubbed->getName(), $parameterName);
         // Inconsistencies
         if (! in_array($parameterName, ['SplFileObject#fputcsv.fields', 'SplFixedArray#fromArray.array'], true)) {
-            self::assertSame($original->isArray(), $stubbed->isArray(), $parameterName);
+            $isArray = strtolower((string) $original->getType()) === 'array';
+            self::assertSame($isArray, $stubbed->isArray(), $parameterName);
         }
 
         // Bugs in PHP: https://3v4l.org/RjCDr
         if (! in_array($parameterName, ['Closure#fromCallable.callable', 'CallbackFilterIterator#__construct.callback'], true)) {
-            self::assertSame($original->isCallable(), $stubbed->isCallable(), $parameterName);
+            $isCallable = strtolower((string) $original->getType()) === 'callable';
+            self::assertSame($isCallable, $stubbed->isCallable(), $parameterName);
         }
 
         self::assertSame($original->canBePassedByValue(), $stubbed->canBePassedByValue(), $parameterName);
@@ -251,11 +253,11 @@ class PhpStormStubsSourceStubberTest extends TestCase
         self::assertSame($original->isPassedByReference(), $stubbed->isPassedByReference(), $parameterName);
         self::assertSame($original->isVariadic(), $stubbed->isVariadic(), $parameterName);
 
-        $class = $original->getClass();
+        $class = $original->getDeclaringClass();
         if ($class) {
             // Not possible to write "RecursiveIterator|IteratorAggregate" in PHP code in JetBrains/phpstorm-stubs
             if ($parameterName !== 'RecursiveTreeIterator#__construct.iterator') {
-                $stubbedClass = $stubbed->getClass();
+                $stubbedClass = $stubbed->getDeclaringClass();
 
                 self::assertInstanceOf(ReflectionClass::class, $stubbedClass, $parameterName);
                 self::assertSame($class->getName(), $stubbedClass->getName(), $parameterName);
