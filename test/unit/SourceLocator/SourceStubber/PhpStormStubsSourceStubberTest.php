@@ -170,7 +170,7 @@ class PhpStormStubsSourceStubberTest extends TestCase
 
             $this->assertSameMethodAttributes($method, $stubbed->getMethod($method->getName()));
         }
-        
+
         self::assertEquals($original->getConstants(), $stubbed->getConstants());
     }
 

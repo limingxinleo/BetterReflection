@@ -376,6 +376,15 @@ class ReflectionParameter
             $type = $type->type;
         }
 
+        if($type instanceof Node\UnionType){
+            $types = [];
+            foreach ($type->types as $identifier){
+                $types[] = ReflectionType::createFromTypeAndReflector((string) $identifier, $this->allowsNull(), $this->reflector);
+            }
+
+            return ReflectionUnionType::createFromTypesAndReflector($types, $this->allowsNull(), $this->reflector);
+        }
+
         return ReflectionType::createFromTypeAndReflector((string) $type, $this->allowsNull(), $this->reflector);
     }
 
