@@ -56,6 +56,8 @@ class ReflectionClass implements Reflection
 {
     public const ANONYMOUS_CLASS_NAME_PREFIX = 'class@anonymous';
 
+    public const ANONYMOUS_CLASS_NAME_TAG = '@anonymous';
+
     private Reflector $reflector;
 
     private ?NamespaceNode $declaringNamespace = null;

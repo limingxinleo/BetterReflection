@@ -48,7 +48,7 @@ class ReflectionObject extends ReflectionClass
     {
         $className = get_class($object);
 
-        if (strpos($className, ReflectionClass::ANONYMOUS_CLASS_NAME_PREFIX) === 0) {
+        if (strpos($className, ReflectionClass::ANONYMOUS_CLASS_NAME_TAG) > 0) {
             $reflector = new ClassReflector(new AnonymousClassObjectSourceLocator(
                 $object,
                 (new BetterReflection())->phpParser(),
